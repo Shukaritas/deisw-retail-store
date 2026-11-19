@@ -13,14 +13,23 @@ pipeline {
   }
 
   stages {
-    stage('Compile') {
+    stage('Compile Project') {
       steps {
         withMaven(maven: 'MAVEN_3_9') {
           sh 'mvn clean compile'
         }
       }
     }
-    stage('SonarQube Analisis') {
+
+    stage('Unit Tests') {
+      steps {
+        withMaven(maven: 'MAVEN_3_9') {
+          sh 'mvn test'
+        }
+      }
+    }
+
+    stage('SonarQube Analysis') {
       steps {
         withMaven(maven: 'MAVEN_3_9') {
           withSonarQubeEnv('Jenkins-Webhook') {
