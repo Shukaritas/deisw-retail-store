@@ -42,6 +42,17 @@ pipeline {
       }
     }
 
+    stage('Checkstyle Analysis') {
+      steps {
+        withMaven(maven: 'MAVEN_3_9') {
+	   sh 'mvn ccheckstyle:check'
+        }
+        timeout(time: 5, unit: 'MINUTES') {
+          waitForQualityGate abortPipeline: true
+        }
+      }
+    }
+
     stage('Docker Image') {
       steps {
         withMaven(maven: 'MAVEN_3_9') {
